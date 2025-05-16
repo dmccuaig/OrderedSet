@@ -4,7 +4,7 @@ namespace OrderedSet;
 
 public class OrderedSet<T> : ICollection<T> where T : class
 {
-	private readonly IDictionary<T, LinkedListNode<T>> _dictionary;
+	private readonly Dictionary<T, LinkedListNode<T>> _dictionary;
 	private readonly LinkedList<T> _linkedList;
 
 	public OrderedSet()
@@ -49,11 +49,10 @@ public class OrderedSet<T> : ICollection<T> where T : class
 		_linkedList.CopyTo(array, arrayIndex);
 	}
 
+	public T[] ToArray() => _linkedList.ToArray();
+
 	public T? First => _linkedList.First?.Value;
 	public T? Last => _linkedList.Last?.Value;
-
-
-	bool ICollection<T>.IsReadOnly => false;
 
 	void ICollection<T>.Add(T value)
 	{
@@ -75,6 +74,7 @@ public class OrderedSet<T> : ICollection<T> where T : class
 
 	public bool AddFirst(T value)
 	{
+		ArgumentNullException.ThrowIfNull(value);
 		var newNode = CreateNewNode(value);
 		if (newNode is null)
 		{
@@ -87,6 +87,7 @@ public class OrderedSet<T> : ICollection<T> where T : class
 
 	public bool AddLast(T value)
 	{
+		ArgumentNullException.ThrowIfNull(value);
 		var newNode = CreateNewNode(value);
 		if (newNode is null)
 		{
@@ -111,6 +112,7 @@ public class OrderedSet<T> : ICollection<T> where T : class
 
 	public bool Remove(T item)
 	{
+		ArgumentNullException.ThrowIfNull(item);
 		if (_dictionary.Remove(item, out var node))
 		{
 			_linkedList.Remove(node);
@@ -143,4 +145,5 @@ public class OrderedSet<T> : ICollection<T> where T : class
 
 		return null;
 	}
+
 }
